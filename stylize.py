@@ -25,14 +25,11 @@ parser.add_argument('--extensions', nargs='+', type=str, default=['png', 'jpeg',
 
 # Advanced options
 parser.add_argument('--content-size', type=int, default=0,
-                    help='New (minimum) size for the content image, \
-                    keeping the original size if set to 0')
+                    help='New (minimum) size for the content image, keeping the original size if set to 0')
 parser.add_argument('--style-size', type=int, default=512,
-                    help='New (minimum) size for the style image, \
-                    keeping the original size if set to 0')
+                    help='New (minimum) size for the style image, keeping the original size if set to 0')
 parser.add_argument('--crop', type=int, default=0,
-                    help='If set to anything else than 0, center crop of this size will be applied to the content image \ 
-                    after resizing in order to create a squared image (default: 0)')
+                    help='If set to anything else than 0, center crop of this size will be applied to the content image after resizing in order to create a squared image (default: 0)')
 
 # random.seed(131213)
 
