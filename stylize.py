@@ -18,11 +18,9 @@ parser.add_argument('--style-dir', type=str,
                     help='Directory path to a batch of style images')
 parser.add_argument('--output-dir', type=str, default='output',
                     help='Directory to save the output images')
-parser.add_argument('--num-styles', type=int, default=1, help='Number of styles to \
-                        create for each image (default: 1)')
+parser.add_argument('--num-styles', type=int, default=1, help='Number of styles to create for each image (default: 1)')
 parser.add_argument('--alpha', type=float, default=1.0,
-                    help='The weight that controls the degree of \
-                          stylization. Should be between 0 and 1')
+                    help='The weight that controls the degree of stylization. Should be between 0 and 1')
 parser.add_argument('--extensions', nargs='+', type=str, default=['png', 'jpeg', 'jpg'], help='List of image extensions to scan style and content directory for (case sensitive), default: png, jpeg, jpg')
 
 # Advanced options
