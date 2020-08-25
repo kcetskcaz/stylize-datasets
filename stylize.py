@@ -141,10 +141,12 @@ def main():
                     style_img.close()
                 content_img.close()
             except OSError as e:
+                print(e)
                 print('Skipping stylization of %s due to an error' %(content_path))
                 skipped_imgs.append(content_path)
                 continue
             except RuntimeError as e:
+                print(e)
                 print('Skipping stylization of %s due to an error' %(content_path))
                 skipped_imgs.append(content_path)
                 continue
