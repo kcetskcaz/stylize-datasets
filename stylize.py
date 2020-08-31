@@ -11,6 +11,9 @@ import torchvision.transforms
 from torchvision.utils import save_image
 from tqdm import tqdm
 
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
 parser = argparse.ArgumentParser(description='This script applies the AdaIN style transfer method to arbitrary datasets.')
 parser.add_argument('--content-dir', type=str,
                     help='Directory path to a batch of content images')
