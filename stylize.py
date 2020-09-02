@@ -153,6 +153,8 @@ def main():
                     np_output = Image.fromarray(np.uint8(np_output * 255))
                     np_output = np.array(np_output.resize(np_content.shape[:2]))
 
+                    print(f'=> Content shape: {np_content.shape}')
+                    print(f'=> Output shape: {np_output.shape}')
                     # Compute the ssim between the content and the output
                     curr_ssim = ssim(np_content, np_output, data_range=np_output.max() - np_output.min(),
                                      multichannel=True)
