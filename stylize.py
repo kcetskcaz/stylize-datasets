@@ -61,6 +61,7 @@ def style_transfer(vgg, decoder, content, style, alpha=1.0):
 def main():
     args = parser.parse_args()
 
+    print(f'=> Using SSIM Threshold {args.ssim_threshold}')
     # set content and style directories
     content_dir = Path(args.content_dir)
     style_dir = Path(args.style_dir)
