@@ -157,7 +157,7 @@ def main():
                     curr_ssim = ssim(np_content, np_output, data_range=np_output.max() - np_output.min(),
                                      multichannel=True)
                     # Store the output and the current ssim
-                    outputs.append(np_output)
+                    outputs.append(output)
                     output_ssims.append(curr_ssim)
                     n_retries += 1
 
@@ -168,7 +168,6 @@ def main():
                     output = outputs[best_idx]
                     print(
                         f'=> No image passed threshold after {n_retries}. Taking best image with {output_ssims[best_idx]} SSIM value')
-                    output = torch.tensor(output).float()/255
 
                 rel_path = content_path.relative_to(content_dir)
                 out_dir = output_dir.joinpath(rel_path.parent)
@@ -196,7 +195,7 @@ def main():
             #     skipped_imgs.append(content_path)
             #     continue
             # finally:
-            #     pbar.update(1)
+            pbar.update(1)
             
     if(len(skipped_imgs) > 0):
         with open(output_dir.joinpath('skipped_imgs.txt'), 'w') as f:
