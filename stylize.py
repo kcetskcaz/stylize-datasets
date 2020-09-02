@@ -10,6 +10,9 @@ import torch.nn as nn
 import torchvision.transforms
 from torchvision.utils import save_image
 from tqdm import tqdm
+import numpy as np
+from skimage.metrics import structural_similarity as ssim
+import matplotlib.pyplot as plt
 
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -33,7 +36,8 @@ parser.add_argument('--style-size', type=int, default=512,
                     help='New (minimum) size for the style image, keeping the original size if set to 0')
 parser.add_argument('--crop', type=int, default=0,
                     help='If set to anything else than 0, center crop of this size will be applied to the content image after resizing in order to create a squared image (default: 0)')
-
+parser.add_argument('--ssim-threshold', type=int, default=0.4, help="SSIM threshold- images below this threshold are regenerated (Default: 0.4)")
+parser.add_argument('--n_retries', type=int, default=20, help="Number of times to re-attempt stylization before taking the best image from the past N stylizations (Default: 10)")
 # random.seed(131213)
 
 def input_transform(size, crop):
@@ -117,16 +121,52 @@ def main():
             try:
                 content_img = Image.open(content_path).convert('RGB')
                 for style_path in random.sample(styles, args.num_styles):
-                    style_img = Image.open(style_path).convert('RGB')
-
                     content = content_tf(content_img)
+
+                    style_img = Image.open(style_path).convert('RGB')
                     style = style_tf(style_img)
                     style = style.to(device).unsqueeze(0)
                     content = content.to(device).unsqueeze(0)
-                    with torch.no_grad():
-                        output = style_transfer(vgg, decoder, content, style,
-                                                args.alpha)
-                    output = output.cpu()
+
+                    # Loop until stylized image is above ssim_thresh or N times, whichever comes first
+                    n_retries = 0
+                    curr_ssim = 0
+                    outputs = []
+                    output_ssims = []
+                    while curr_ssim < args.ssim_threshold and n_retries < args.n_retries:
+                        if n_retries > 0:
+                            style_path = random.sample(styles, 1)[0]
+                            style_img = Image.open(style_path).convert('RGB')
+                            style = style_tf(style_img)
+                            style = style.to(device).unsqueeze(0)
+
+                        with torch.no_grad():
+                            output = style_transfer(vgg, decoder, content, style,
+                                                    args.alpha)
+                        output = output.cpu()
+                        # Get the source image as numpy
+                        np_content = np.array(content_img)
+                        # Take the output image and resize so the dimensions match the content
+                        np_output = output[0, :]
+                        # Make sure the shape is (W, H, C)
+                        np_output = np_output.transpose(0, 2).transpose(0, 1).numpy()
+                        np_output = Image.fromarray(np.uint8(np_output*255))
+                        np_output = np.array(np_output.resize(np_content.shape[:2]))
+
+                        # Compute the ssim between the content and the output
+                        curr_ssim = ssim(np_content, np_output, data_range=np_output.max() - np_output.min(), multichannel=True)
+                        # Store the output and the current ssim
+                        outputs.append(np_output)
+                        output_ssims.append(curr_ssim)
+                        n_retries += 1
+
+                    # If the last ssim val is less than the threshold, select the output image (this needs to be assigned to the output variable
+                    if curr_ssim < args.ssim_threshold:
+                        output_ssims = np.array(output_ssims)
+                        best_idx = output_ssims.argmax()
+                        output = outputs[best_idx]
+                        print(f'=> No image passed threshold after {n_retries}. Taking best image with {output_ssims[best_idx]} SSIM value')
+                        output = torch.tensor(output)
 
                     rel_path = content_path.relative_to(content_dir)
                     out_dir = output_dir.joinpath(rel_path.parent)
