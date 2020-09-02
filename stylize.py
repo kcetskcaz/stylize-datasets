@@ -151,10 +151,8 @@ def main():
                     # Make sure the shape is (W, H, C)
                     np_output = np_output.transpose(0, 2).transpose(0, 1).numpy()
                     np_output = Image.fromarray(np.uint8(np_output * 255))
-                    np_output = np.array(np_output.resize(np_content.shape[:2]))
+                    np_output = np.array(np_output.resize(np_content.shape[:2][::-1]))
 
-                    print(f'=> Content shape: {np_content.shape}')
-                    print(f'=> Output shape: {np_output.shape}')
                     # Compute the ssim between the content and the output
                     curr_ssim = ssim(np_content, np_output, data_range=np_output.max() - np_output.min(),
                                      multichannel=True)
