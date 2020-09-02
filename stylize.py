@@ -168,7 +168,7 @@ def main():
                     output = outputs[best_idx]
                     print(
                         f'=> No image passed threshold after {n_retries}. Taking best image with {output_ssims[best_idx]} SSIM value')
-                    output = torch.tensor(output.float()/255)
+                    output = torch.tensor(output).float()/255
 
                 rel_path = content_path.relative_to(content_dir)
                 out_dir = output_dir.joinpath(rel_path.parent)
