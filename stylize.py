@@ -162,15 +162,15 @@ def main():
                         output_ssims.append(curr_ssim)
                         n_retries += 1
 
-                    if (len(output_ssims) < args.n_retries and len(output_ssims) > 5) and num_written < 5:
-                        worst = np.array(output_ssims).argmin()
-                        base_name = os.path.basename(str(content_path)).split('.')[0]
-                        save_image(outputs[worst], f'/media/zsteck/storage/lowshot/experiments/synthetic/{base_name}_rejected.png',
-                               padding=0)
-                        save_image(output, f'/media/zsteck/storage/lowshot/experiments/synthetic/{base_name}_accepted.png', padding=0)
-                        save_image(content.cpu(), f'/media/zsteck/storage/lowshot/experiments/synthetic/{base_name}.png',
-                                   padding=0)
-                        num_written += 1
+                    # if (len(output_ssims) < args.n_retries and len(output_ssims) > 5) and num_written < 5:
+                    #     worst = np.array(output_ssims).argmin()
+                    #     base_name = os.path.basename(str(content_path)).split('.')[0]
+                    #     save_image(outputs[worst], f'/media/zsteck/storage/lowshot/experiments/synthetic/{base_name}_rejected.png',
+                    #            padding=0)
+                    #     save_image(output, f'/media/zsteck/storage/lowshot/experiments/synthetic/{base_name}_accepted.png', padding=0)
+                    #     save_image(content.cpu(), f'/media/zsteck/storage/lowshot/experiments/synthetic/{base_name}.png',
+                    #                padding=0)
+                    #     num_written += 1
 
                     # If the last ssim val is less than the threshold, select the output image (this needs to be assigned to the output variable
                     if curr_ssim < args.ssim_threshold:
