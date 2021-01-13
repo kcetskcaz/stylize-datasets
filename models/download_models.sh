@@ -6,6 +6,6 @@ cd models
 # 3. replacing zero-padding with reflection-padding
 # The original vgg_normalised.caffemodel can be obtained with:
 # "wget -c --no-check-certificate https://bethgelab.org/media/uploads/deeptextures/vgg_normalised.caffemodel"
-wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=108uza-dsmwvbW2zv-G73jtVcMU_2Nb7Y' -O vgg_normalised.pth
-wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=1w9r1NoYnn7tql1VYG3qDUzkbIks24RBQ' -O decoder.pth
+wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1EpkBA2K2eYILDSyPTt0fztz59UjAIpZU' -O vgg_normalised.pth
+wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1bMfhMMwPeXnYSQI6cDWElSZxOxc6aVyr' -O decoder.pth
 cd ..
